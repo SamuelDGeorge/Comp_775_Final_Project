@@ -2,9 +2,9 @@ cd C:\Users\sdgeo\Dropbox\Own\Graduate-School\First_Semester\COMP_775\Workspace\
 correct_pdms = load('data\raw_matlab\correctpdms.mat');
 grey_images = load('data\raw_matlab\greyimages.mat');
 
-cd C:\Users\sdgeo\Dropbox\Own\Graduate-School\First_Semester\COMP_775\Workspace\Final_Project\Comp_775_Final_Project\data\raw_images\;
+cd D:\Machine_Learning\Datasets\corpus_learning\raw_data;
 
-data = print_image_data(grey_images,correct_pdms);
+data = print_image_data(grey_images,correct_pdms,4,10);
 writetable(data,'image_table_data.csv','Delimiter',',') 
 
 

@@ -83,6 +83,19 @@ def build_iterator(is_training, filenames, batch_size, num_epochs=1000, num_para
     iterator = dataset.make_one_shot_iterator()
     return iterator
 
-def get_values(sess, a,b,c):
-    a, b, c = sess.run([a,b,c])
-    return a,b - 1, c
+def get_values_imagenet(sess, image,label,filename):
+    im, lab, file = sess.run([image,label,filename])
+    return im,lab - 1, file
+
+def get_values_bounded(sess, image,label,filename, offset):
+    im, lab, file = sess.run([image,label,filename])
+    lab = lab + offset
+    return im,lab,file
+
+def get_values_bounded_points(sess, image,p1,p2,p3,p4,filename, offset):
+    im,y1,y2,y3,y4,file = sess.run([image,p1,p2,p3,p4,filename])
+    y1 = y1 + offset
+    y2 = y2 + offset
+    y3 = y3 + offset
+    y4 = y4 + offset
+    return im,y1,y2,y3,y4,file

@@ -4,7 +4,7 @@ grey_images = load('data\raw_matlab\greyimages.mat');
 
 cd D:\Machine_Learning\Datasets\corpus_learning\raw_data;
 
-data = print_image_data(grey_images,correct_pdms,4,10);
+data = print_image_data(grey_images,correct_pdms,4,72);
 writetable(data,'image_table_data.csv','Delimiter',',') 
 
 

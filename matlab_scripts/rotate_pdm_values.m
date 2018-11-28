@@ -1,6 +1,6 @@
-function [rotated_pdms] = rotate_pdm_values(original_points)
+function [rotated_pdms] = rotate_pdm_values(original_points, degrees)
 new_points = [];
-rotation_matrix = [0,-1;1,0];
+rotation_matrix = [cosd(degrees),-sind(degrees);sind(degrees),cosd(degrees)];
 x = original_points(:,1);
 y = original_points(:,2);
 x_norm = x - (256/2);

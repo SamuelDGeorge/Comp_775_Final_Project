@@ -47,6 +47,10 @@ def _convert_to_example(filename, image_buffer, label, height, width):
       'image/colorspace': _bytes_feature(tf.compat.as_bytes(colorspace)),
       'image/channels': _int64_feature(channels),
       'image/class/label': _float64_feature(label),
+      'image/class/p1': _float64_feature(label[0:2]),
+      'image/class/p2': _float64_feature(label[2:4]),
+      'image/class/p3': _float64_feature(label[4:6]),
+      'image/class/p4': _float64_feature(label[6:8]),
       'image/format': _bytes_feature(tf.compat.as_bytes(image_format)),
       'image/filename': _bytes_feature(tf.compat.as_bytes(os.path.basename(filename))),
       'image/encoded': _bytes_feature(tf.compat.as_bytes(image_buffer))}))

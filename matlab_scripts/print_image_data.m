@@ -1,7 +1,10 @@
-function [pdm_image_table] = print_image_data(grey_images, correct_pdms, number_of_points_in_pdm, num_versions)
+function [pdm_image_table] = print_image_data(grey_images, correct_pdms, number_of_points_in_pdm, num_angles)
+
+%table for all results
 pdm_image_table = table({'Filename'}, {[]});
-image = grey_images.greyimages(:,1);
+
 for i = 1:32
+    %Get current image and its pdm
     grey_image = grey_images.greyimages(:,i);
     pdms_values = correct_pdms.correctpdms(:,i);
     image_square = reshape(grey_image,256,256);
@@ -9,59 +12,28 @@ for i = 1:32
     y = pdms_values(2:2:end);
     points = [x,y];
     
-    for j = 1:num_versions
-        name = ['corpus_image_' 'original_' int2str(i) '_' 'version_' int2str(j) '.jpg'];
+    %intial setup for angles
+    current_angle = 0;
+    step_size = 360/num_angles;
+    
+    %print an image and PDM for every rotation of the image.
+    for j = 1:num_angles
+        name = ['corpus_image_' 'original_' int2str(i) '_' 'angle_' int2str(current_angle) '.jpg'];
         image_name = {name};
-        imwrite(mat2gray(image_square), name)
+        
+        current_image = imrotate(image_square,current_angle,'crop');
+        rotated_points = rotate_pdm_values(points,current_angle);
+        
+        imwrite(mat2gray(current_image), name)
 
-        abbreviated_point_array = get_point_array(points,number_of_points_in_pdm,j);
+        abbreviated_point_array = get_point_array(rotated_points,number_of_points_in_pdm,1);
 
 
         next_row = {image_name,{abbreviated_point_array}};
         pdm_image_table = [pdm_image_table;next_row];
+        current_angle = current_angle + step_size;
     end
     
-    grey_rotated_1 = imrotate(image_square,90);
-    rotated_points_1 = rotate_pdm_values(points);
-    
-    for j = 1:num_versions
-        name = ['corpus_image_' '90_' int2str(i) '_' 'version_' int2str(j) '.jpg'];
-        image_name = {name};
-        imwrite(mat2gray(grey_rotated_1), name)
-
-        abbreviated_point_array = get_point_array(rotated_points_1,number_of_points_in_pdm,j);
-
-        next_row = {image_name,{abbreviated_point_array}};
-        pdm_image_table = [pdm_image_table;next_row];
-    end
-    
-    grey_rotated_1 = imrotate(grey_rotated_1,90);
-    rotated_points_1 = rotate_pdm_values(rotated_points_1);
-    
-    for j = 1:num_versions
-        name = ['corpus_image_' '180_' int2str(i) '_' 'version_' int2str(j) '.jpg'];
-        image_name = {name};
-        imwrite(mat2gray(grey_rotated_1), name)
-
-        abbreviated_point_array = get_point_array(rotated_points_1,number_of_points_in_pdm,j);
-
-        next_row = {image_name,{abbreviated_point_array}};
-        pdm_image_table = [pdm_image_table;next_row];
-    end
-    
-    grey_rotated_1 = imrotate(grey_rotated_1,90);
-    rotated_points_1 = rotate_pdm_values(rotated_points_1);
-    
-    for j = 1:num_versions
-        name = ['corpus_image_' '270_' int2str(i) '_' 'version_' int2str(j) '.jpg'];
-        image_name = {name};
-        imwrite(mat2gray(grey_rotated_1), name)
-
-        abbreviated_point_array = get_point_array(rotated_points_1,number_of_points_in_pdm,j);
-
-        next_row = {image_name,{abbreviated_point_array}};
-        pdm_image_table = [pdm_image_table;next_row];
-    end
 end
     
 end

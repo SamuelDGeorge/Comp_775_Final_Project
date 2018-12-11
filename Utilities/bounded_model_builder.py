@@ -118,6 +118,19 @@ def get_bounded_batch(is_training, filenames, batch_size, num_epochs=1, num_para
  
     return features, labels
 
+def build_dataset_bounded(is_training, filenames, batch_size, num_epochs=1000, num_parallel_calls=12, num_points = 8, offset=37.5):
+    dataset = tf.data.TFRecordDataset(filenames)
+
+    if is_training:
+        dataset = dataset.shuffle(buffer_size=1500)
+
+    dataset = dataset.map(lambda value: parse_bounded_record_points(value, is_training, num_points, offset),
+                            num_parallel_calls=num_parallel_calls)
+    dataset = dataset.shuffle(buffer_size=10000)
+    dataset = dataset.batch(batch_size)
+    dataset = dataset.repeat(num_epochs)
+    return dataset
+
 def build_bounded_iterator(is_training, filenames, batch_size, num_epochs=1000, num_parallel_calls=12, num_points = 8, offset=37.5):
     dataset = tf.data.TFRecordDataset(filenames)
 
